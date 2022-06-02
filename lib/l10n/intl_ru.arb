@@ -1,0 +1,27 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Приложение пациента",
+  "@appTitle": {
+    "description": "Название приложения"
+  },
+  "loginErrorNote": "Произошла ошибка при входе. Проверьте корректность введенных данных и попробуйте снова. ",
+  "@loginErrorNote": {},
+  "loginErrorTitle": "Ошибка",
+  "@loginErrorTitle": {},
+  "loginSingIn": "Войти",
+  "@loginSingIn": {},
+  "loginWelcomeTitle": "Добро\\nпожаловать",
+  "@loginWelcomeTitle": {},
+  "navBarHome": "Дом",
+  "@navBarHome": {
+    "description": "Домашнее меню"
+  },
+  "navBarMedicine": "Лекарства",
+  "@navBarMedicine": {
+    "description": "Меню с лекарствами"
+  },
+  "navBarSettings": "Настройки",
+  "@navBarSettings": {
+    "description": "Меню настроек"
+  }
+}

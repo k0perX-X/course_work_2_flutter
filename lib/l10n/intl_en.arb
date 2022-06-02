@@ -1,0 +1,27 @@
+{
+  "@@locale": "en",
+  "appTitle": "Patient Application",
+  "@appTitle": {
+    "description": "Название приложения"
+  },
+  "loginErrorNote": "An error occurred while logging in. Check the correctness of the entered data and try again.",
+  "@loginErrorNote": {},
+  "loginErrorTitle": "Error",
+  "@loginErrorTitle": {},
+  "loginSingIn": "Sing in",
+  "@loginSingIn": {},
+  "loginWelcomeTitle": "Welcome",
+  "@loginWelcomeTitle": {},
+  "navBarHome": "Home",
+  "@navBarHome": {
+    "description": "Домашнее меню"
+  },
+  "navBarMedicine": "Medicine",
+  "@navBarMedicine": {
+    "description": "Меню с лекарствами"
+  },
+  "navBarSettings": "Settings",
+  "@navBarSettings": {
+    "description": "Меню настроек"
+  }
+}
