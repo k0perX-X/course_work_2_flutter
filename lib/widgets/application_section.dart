@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:course_work_2_flutter/globals.dart' as globals;
 
 class ApplicationSection extends StatefulWidget {
   final String title;
@@ -18,7 +19,7 @@ typedef OnTap = void Function();
 class TextLine {
   final String text;
   final TextStyle style;
-  final void Function() func;
+  final Function(BuildContext, int) func;
 
   TextLine(this.text, this.func, this.style);
 }
@@ -51,12 +52,12 @@ class _ApplicationSection extends State<ApplicationSection> {
                       // и boxShadow
                       // здесь мы задаем радиус закругления левого и правого
                       // верхних углов
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(15),
                             topRight: Radius.circular(15)),
                         // цвет Container'а мы указываем в BoxDecoration
-                        color: Colors.pinkAccent,
+                        color: globals.accentColor,
                       ),
                       child: Text(
                         // указываем имя pony
@@ -67,7 +68,9 @@ class _ApplicationSection extends State<ApplicationSection> {
             List.generate(
                 widget.textLines.length,
                 (index) => InkWell(
-                    onTap: widget.textLines[index].func,
+                    onTap: () {
+                      widget.textLines[index].func(context, index);
+                    },
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       child: Text(

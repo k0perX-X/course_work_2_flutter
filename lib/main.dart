@@ -1,17 +1,25 @@
+import 'dart:async';
 import 'package:course_work_2_flutter/pages/home_page.dart';
 import 'package:course_work_2_flutter/pages/medicine_page.dart';
 import 'package:course_work_2_flutter/pages/settings_page.dart';
 import 'package:course_work_2_flutter/pages/login_page.dart';
+import 'package:course_work_2_flutter/pages/take_medicine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'globals.dart' as globals;
-
-
+import 'package:course_work_2_flutter/globals.dart' as globals;
+import 'package:flutter/services.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 Future<void> main() async {
+  //setup flutter_native_splash
+  WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized(); //инициализация приложения
+  //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  //инициализация globals
   globals.settings = await SharedPreferences.getInstance();
+
   runApp(const MyApp());
 }
 
@@ -23,11 +31,27 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(useMaterial3: true,
+          primaryColor: globals.accentColor,),
       onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-      home: const LoginPage()//ScaffoldNavigatorBar()
+      home: const StartAppWidget(),
+      // initialRoute: '/',
+      // routes: <String, WidgetBuilder>{
+      //   '/': (BuildContext context) => const StartAppWidget(),
+      //   '/main': (BuildContext context) => const ScaffoldNavigatorBar(),
+      //   '/login': (BuildContext context) => const LoginPage(),
+      // },
     );
   }
+}
+
+class StartAppWidget extends StatelessWidget {
+  const StartAppWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => globals.settings.get('token') == null
+      ? const LoginPage()
+      : const ScaffoldNavigatorBar();
 }
 
 class ScaffoldNavigatorBar extends StatefulWidget {
@@ -37,8 +61,7 @@ class ScaffoldNavigatorBar extends StatefulWidget {
   State<StatefulWidget> createState() => _ScaffoldNavigatorBar();
 }
 
-class _ScaffoldNavigatorBar extends State {
-  int _selectedIndex = 0;
+class _ScaffoldNavigatorBar extends State<ScaffoldNavigatorBar> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     MedicinePage(),
@@ -51,27 +74,34 @@ class _ScaffoldNavigatorBar extends State {
     });
   }
 
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.appTitle),
-      ),
-      body: _widgetOptions[_selectedIndex],
+      // appBar: AppBar(
+      //   title: Text(AppLocalizations.of(context)!.appTitle),
+      //   // systemOverlayStyle: const SystemUiOverlayStyle(
+      //   //   // Status bar color
+      //   //   statusBarColor: Colors.white,
+      //   //
+      //   //   // Status bar brightness (optional)
+      //   //   statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+      //   //   statusBarBrightness: Brightness.dark, // For iOS (dark icons)
+      //   // ),
+      // ),
+      body: SafeArea(child: _widgetOptions[_selectedIndex]),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: const Icon(Icons.home),
-              label: AppLocalizations.of(context)!.navBarHome
-          ),
-           BottomNavigationBarItem(
-              icon: const Icon(Icons.add_business),
-              label: AppLocalizations.of(context)!.navBarMedicine
-          ),
+              label: AppLocalizations.of(context)!.navBarHome),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.settings),
-            label: AppLocalizations.of(context)!.navBarSettings
-          )
+              icon: const Icon(Icons.add_business),
+              label: AppLocalizations.of(context)!.navBarMedicine),
+          BottomNavigationBarItem(
+              icon: const Icon(Icons.settings),
+              label: AppLocalizations.of(context)!.navBarSettings)
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],

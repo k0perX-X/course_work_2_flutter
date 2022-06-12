@@ -1,43 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
+// import 'package:bcrypt/bcrypt.dart';
 import 'package:course_work_2_flutter/hidden_values.dart' as hidden_values;
 import 'dart:developer' as developer;
+import 'package:course_work_2_flutter/globals.dart' as globals;
+import 'package:course_work_2_flutter/scripts/all_scripts.dart' as scripts;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPage();
-}
-
-class Response {
-  // "token": "string",
-  // "name": "string",
-  // "surname": "string",
-  // "middleName": "string"
-  final String token;
-  final String name;
-  final String surname;
-  final String? middleName;
-
-  const Response(
-      {required this.token,
-      required this.name,
-      required this.surname,
-      required this.middleName});
-
-  factory Response.fromJson(Map<String, dynamic> json) {
-    return Response(
-        token: json['token'],
-        name: json['name'],
-        surname: json['surname'],
-        middleName: json['middleName']);
-  }
 }
 
 class _LoginPage extends State<LoginPage> {
@@ -69,21 +45,19 @@ class _LoginPage extends State<LoginPage> {
     var deviceInfo = await deviceInfoPlugin.deviceInfo;
     var map = deviceInfo.toMap();
     try {
-      var response = await http.get(Uri.parse(
-          'https://${hidden_values.serviceUrl}/OAuth?eMail=$email&md5Password=${md5.convert(utf8.encode(password)).toString()}&deviceInformation=${map.toString()}'));
-      if (response.statusCode == 200) {
-        Response.fromJson(jsonDecode(response.body));
-      } else {
-        developer.log(response.statusCode.toString());
-        showErrorMessage();
-      }
-    }
-    on http.ClientException catch (e , s){
-      developer.log("login error - http.ClientException", error: e, stackTrace: s);
+      var r = await fetchResponse(email, password, map.toString());
+      globals.settings.setString("name", r.name);
+      globals.settings.setString("surname", r.surname);
+      globals.settings.setString("middleName", r.middleName ?? "");
+      globals.settings.setString("token", r.token);
+      scripts.reloadApp(context);
+    } on http.ClientException catch (e, s) {
+      developer.log("login error - http.ClientException",
+          error: e, stackTrace: s);
       showErrorMessage();
-    }
-    catch (e, s) {
-      developer.log("login error", error: e, stackTrace: s);
+    } catch (e, s) {
+      developer.log("login error - $e", error: e, stackTrace: s);
+      showErrorMessage();
     }
   }
 
@@ -91,8 +65,8 @@ class _LoginPage extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        image:
-            DecorationImage(image: AssetImage('login.png'), fit: BoxFit.fill),
+        image: DecorationImage(
+            image: AssetImage('assets/login.png'), fit: BoxFit.fill),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -210,4 +184,58 @@ class _LoginPage extends State<LoginPage> {
       ),
     );
   }
+}
+
+class Response {
+  // "token": "string",
+  // "name": "string",
+  // "surname": "string",
+  // "middleName": "string"
+  final String token;
+  final String name;
+  final String surname;
+  final String? middleName;
+
+  const Response(
+      {required this.token,
+      required this.name,
+      required this.surname,
+      required this.middleName});
+
+  factory Response.fromJson(Map<String, dynamic> json) {
+    return Response(
+        token: json['token'],
+        name: json['name'],
+        surname: json['surname'],
+        middleName: json['middleName']);
+  }
+}
+
+Future<Response> fetchResponse(
+    String email, String password, String deviceInformation) async {
+  final url = Uri.http(hidden_values.serviceUrl, "OAuth");
+  final response = await http.post(
+    url,
+    headers: {
+      "content-type": "application/json; charset=utf-8"
+    },
+    body: jsonEncode({
+      "eMail": email,
+      "password": password,
+      "deviceInformation": deviceInformation
+    })
+  );
+  if (response.statusCode == 200) {
+    return Response.fromJson(jsonDecode(response.body));
+  } else if (response.statusCode == 403) {
+    throw ForbiddenException('Forbidden error');
+  } else {
+    throw Exception("Unknown error ${response.statusCode}");
+  }
+}
+
+class ForbiddenException implements Exception {
+  final String cause;
+
+  ForbiddenException(this.cause);
 }
