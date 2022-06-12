@@ -6,6 +6,7 @@ import 'package:course_work_2_flutter/hidden_values.dart' as hidden_values;
 import 'package:http/http.dart' as http;
 import 'package:course_work_2_flutter/globals.dart' as globals;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 const procedureDuration = Duration(days: 14);
 
@@ -18,7 +19,7 @@ class PatientProcedure {
 
   factory PatientProcedure.fromJson(Map<String, dynamic> json) {
     return PatientProcedure(
-        json["dateTime"],
+        DateTime.parse(json["dateTime"]),
         Procedure(json["procedure"]["id"], json["procedure"]["name"],
             json["procedure"]["note"]),
         json["note"]);
@@ -51,7 +52,7 @@ class PatientDoctorsAppointment {
 
   factory PatientDoctorsAppointment.fromJson(Map<String, dynamic> json) {
     return PatientDoctorsAppointment(
-        json["dateTime"],
+        DateTime.parse(json["dateTime"]),
         Doctor(
             json["doctor"]["id"],
             json["doctor"]["name"],
@@ -62,8 +63,9 @@ class PatientDoctorsAppointment {
   }
 
   String toStringContext(BuildContext context) {
-    return AppLocalizations.of(context)!.homePatientDoctorsAppointmentToString
-        .replaceAll("{date}", dateTime.toString())
+    return AppLocalizations.of(context)!
+        .homePatientDoctorsAppointmentToString
+        .replaceAll("{date}", DateFormat.yMd().add_Hm().format(dateTime))
         .replaceAll("{doctorName}", doctor.name)
         .replaceAll("{doctorSurname}", doctor.surname)
         .replaceAll("{doctorMiddleName}", doctor.middleName ?? "")
@@ -98,14 +100,14 @@ Future<List<TextLine>> getProcedures(BuildContext context, TextStyle textStyle,
     ];
   }
   return List<TextLine>.generate(json.length, (index) {
-    var p = PatientDoctorsAppointment.fromJson(json[index]);
+    var p = PatientProcedure.fromJson(json[index]);
     return TextLine(p.toStringContext(context),
         functionOnTap ?? (context, i) {}, textStyle);
   });
 }
 
-Future<List<TextLine>> getDoctorsAppointment(BuildContext context,
-    TextStyle textStyle,
+Future<List<TextLine>> getDoctorsAppointment(
+    BuildContext context, TextStyle textStyle,
     {Function(BuildContext, int)? functionOnTap}) async {
   final url = Uri.http(hidden_values.serviceUrl, "PatientDoctorsAppointment",
       {"beforeDate": DateTime.now().add(procedureDuration).toIso8601String()});
@@ -122,7 +124,7 @@ Future<List<TextLine>> getDoctorsAppointment(BuildContext context,
     ];
   }
   return List<TextLine>.generate(json.length, (index) {
-    var p = PatientProcedure.fromJson(json[index]);
+    var p = PatientDoctorsAppointment.fromJson(json[index]);
     return TextLine(
         p.toStringContext(context), functionOnTap ?? (c, i) {}, textStyle);
   });
@@ -134,114 +136,114 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var titleStyle =
-    Theme
-        .of(context)
-        .textTheme
-        .bodyText1!
-        .copyWith(color: Colors.white);
-    return
-        ListView(children: [
-          //процедуры
-          FutureBuilder<List<TextLine>>(
-              future: getProcedures(
-                  context, Theme
-                  .of(context)
-                  .textTheme
-                  .bodyText1!),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<TextLine>> snapshot) {
-                List<Widget> children;
-                if (snapshot.hasData) {
-                  children = <Widget>[
-                    ApplicationSection(
-                        AppLocalizations.of(context)!.homePatientProcedureTitle,
-                        titleStyle,
-                        snapshot.data!)
-                  ];
-                } else if (snapshot.hasError) {
-                  children = <Widget>[
-                    const Icon(
-                      Icons.error_outline,
-                      color: Colors.red,
-                      size: 60,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      // child: Text(snapshot.error.toString()),
-                      child: Text(AppLocalizations.of(context)!
-                          .homePatientProcedureLoadingError),
-                    )
-                  ];
-                } else {
-                  children = <Widget>[
-                    const SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: CircularProgressIndicator(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Text(AppLocalizations.of(context)!
-                          .homePatientProcedureLoading),
-                    )
-                  ];
-                }
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: children,
-                );
-              }),
-          //Доктор
-          FutureBuilder<List<TextLine>>(
-              future: getDoctorsAppointment(
-                  context, Theme
-                  .of(context)
-                  .textTheme
-                  .bodyText1!),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<TextLine>> snapshot) {
-                List<Widget> children;
-                if (snapshot.hasData) {
-                  children = <Widget>[
-                    ApplicationSection(
-                        AppLocalizations.of(context)!
-                            .homePatientDoctorsAppointmentTitle,
-                        titleStyle,
-                        snapshot.data!)
-                  ];
-                } else if (snapshot.hasError) {
-                  children = <Widget>[
-                    const Icon(
-                      Icons.error_outline,
-                      color: Colors.red,
-                      size: 60,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      // child: Text(snapshot.error.toString()),
-                      child: Text(AppLocalizations.of(context)!
-                          .homePatientDoctorsAppointmentLoadingError),
-                    )
-                  ];
-                } else {
-                  children = <Widget>[
-                    const SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: CircularProgressIndicator(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Text(AppLocalizations.of(context)!
-                          .homePatientDoctorsAppointmentLoading),
-                    )
-                  ];
-                }
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: children,
-                );
-              })
-        ]);
+        Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white);
+    return ListView(children: [
+      //процедуры
+      FutureBuilder<List<TextLine>>(
+          future:
+              getProcedures(context, Theme.of(context).textTheme.bodyText1!),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<TextLine>> snapshot) {
+            List<Widget> children;
+            if (snapshot.hasData) {
+              children = <Widget>[
+                ApplicationSection(
+                    AppLocalizations.of(context)!.homePatientProcedureTitle,
+                    titleStyle,
+                    snapshot.data!)
+              ];
+            } else if (snapshot.hasError) {
+              children = <Widget>[
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 60,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text(snapshot.error.toString()),
+                  // child: Text(AppLocalizations.of(context)!
+                  //     .homePatientProcedureLoadingError),
+                )
+              ];
+            } else {
+              children = <Widget>[
+                const SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: CircularProgressIndicator(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text(AppLocalizations.of(context)!
+                      .homePatientProcedureLoading),
+                )
+              ];
+            }
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: children,
+            );
+          }),
+      //Доктор
+      FutureBuilder<List<TextLine>>(
+          future: getDoctorsAppointment(
+              context, Theme.of(context).textTheme.bodyText1!),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<TextLine>> snapshot) {
+            List<Widget> children;
+            if (snapshot.hasData) {
+              children = <Widget>[
+                ApplicationSection(
+                    AppLocalizations.of(context)!
+                        .homePatientDoctorsAppointmentTitle,
+                    titleStyle,
+                    snapshot.data!)
+              ];
+            } else if (snapshot.hasError) {
+              children = <Widget>[
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 60,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  // child: Text(snapshot.error.toString()),
+                  child: Text(AppLocalizations.of(context)!
+                      .homePatientDoctorsAppointmentLoadingError),
+                )
+              ];
+            } else {
+              children = <Widget>[
+                const SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: CircularProgressIndicator(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text(AppLocalizations.of(context)!
+                      .homePatientDoctorsAppointmentLoading),
+                )
+              ];
+            }
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: children,
+            );
+          }),
+      Padding(
+        padding: const EdgeInsets.all(15),
+        child: FloatingActionButton.extended(
+          label: Text(
+            "Добавить информацию о состоянии здоровья",
+            style: TextStyle(color: globals.textOnAccent),
+          ), // TODO
+          backgroundColor: globals.accentColor,
+          onPressed: () {},
+        ),
+      ),
+    ]);
   }
 }

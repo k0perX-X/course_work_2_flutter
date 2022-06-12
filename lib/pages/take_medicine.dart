@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:course_work_2_flutter/globals.dart' as globals;
 import 'package:course_work_2_flutter/hidden_values.dart' as hidden_values;
 import 'package:http/http.dart' as http;
+import 'dart:developer' as developer;
 
 class TakeMedicine extends StatefulWidget {
   const TakeMedicine(this.drug, this.remaining, {Key? key}) : super(key: key);
@@ -62,8 +63,8 @@ class _TakeMedicine extends State<TakeMedicine> {
           hidden_values.serviceUrl,
           "TakeMedicine",
           {
-            "drugId": widget.drug.id,
-            'numberOfDoses': _drugCounter
+            "drugId": widget.drug.id.toString(),
+            'numberOfDoses': _drugCounter.toString()
           }
       );
       final response = await http.put(url,
@@ -78,6 +79,8 @@ class _TakeMedicine extends State<TakeMedicine> {
       }
     }
     catch (e, s) {
+      developer.log(e.toString());
+      developer.log(s.toString());
       showErrorMessage();
     }
   }
@@ -108,7 +111,7 @@ class _TakeMedicine extends State<TakeMedicine> {
                             Visibility(
                                 visible: widget.drug.note?.isNotEmpty ?? false,
                                 child: Text(
-                                  widget.drug.note!,
+                                  widget.drug.note ?? "",
                                   style: Theme
                                       .of(context)
                                       .textTheme
@@ -131,18 +134,17 @@ class _TakeMedicine extends State<TakeMedicine> {
                               size: const Size(100, 100),
                               child: ClipOval(
                                 child: Material(
-                                  color: Colors.amberAccent,
+                                  color: globals.accentColor,
                                   child: InkWell(
-                                    splashColor: Colors.green,
                                     onTap: _decrementCounter,
-                                    child: Icon(Icons.remove),
+                                    child: const Icon(Icons.remove),
                                   ),
                                 ),
                               ),
                             ),
                             Text(
                               "$_drugCounter",
-                              style: TextStyle(fontSize: 100),
+                              style: const TextStyle(fontSize: 100),
                             ),
                             SizedBox.fromSize(
                               size: const Size(100, 100),
@@ -151,7 +153,7 @@ class _TakeMedicine extends State<TakeMedicine> {
                                   color: globals.accentColor,
                                   child: InkWell(
                                     onTap: _incrementCounter,
-                                    child: Icon(Icons.add),
+                                    child: const Icon(Icons.add),
                                   ),
                                 ),
                               ),

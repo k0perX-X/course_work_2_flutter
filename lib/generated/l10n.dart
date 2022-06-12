@@ -90,7 +90,7 @@ class S {
     );
   }
 
-  /// `{date}, {doctorName} {doctorSurname} {doctorMiddleName} {nl} {doctorNote}`
+  /// `{date}, {doctorName} {doctorSurname} {doctorMiddleName}{nl}{doctorNote}`
   String homePatientDoctorsAppointmentToString(
       Object date,
       Object doctorName,
@@ -99,7 +99,7 @@ class S {
       Object nl,
       Object doctorNote) {
     return Intl.message(
-      '$date, $doctorName $doctorSurname $doctorMiddleName $nl $doctorNote',
+      '$date, $doctorName $doctorSurname $doctorMiddleName$nl$doctorNote',
       name: 'homePatientDoctorsAppointmentToString',
       desc: '',
       args: [date, doctorName, doctorSurname, doctorMiddleName, nl, doctorNote],
@@ -146,11 +146,11 @@ class S {
     );
   }
 
-  /// `{date}, {procedureName} {nl} {procedureNote}`
+  /// `{date}, {procedureName}{nl}{procedureNote}`
   String homePatientProcedureToString(
       Object date, Object procedureName, Object nl, Object procedureNote) {
     return Intl.message(
-      '$date, $procedureName $nl $procedureNote',
+      '$date, $procedureName$nl$procedureNote',
       name: 'homePatientProcedureToString',
       desc: '',
       args: [date, procedureName, nl, procedureNote],

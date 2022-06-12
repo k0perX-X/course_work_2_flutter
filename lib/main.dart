@@ -7,12 +7,15 @@ import 'package:course_work_2_flutter/pages/take_medicine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:course_work_2_flutter/globals.dart' as globals;
 import 'package:flutter/services.dart';
+import 'dart:developer' as developer;
 // import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 Future<void> main() async {
+  developer.log(Intl.systemLocale);
   //setup flutter_native_splash
   WidgetsBinding widgetsBinding =
       WidgetsFlutterBinding.ensureInitialized(); //инициализация приложения
@@ -31,10 +34,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(useMaterial3: true,
-          primaryColor: globals.accentColor,),
+      theme: ThemeData(
+        useMaterial3: true,
+        primaryColor: globals.accentColor,
+      ),
       onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
       home: const StartAppWidget(),
+      debugShowCheckedModeBanner: false,
       // initialRoute: '/',
       // routes: <String, WidgetBuilder>{
       //   '/': (BuildContext context) => const StartAppWidget(),

@@ -22,10 +22,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(
           date, doctorName, doctorSurname, doctorMiddleName, nl, doctorNote) =>
-      "${date}, ${doctorName} ${doctorSurname} ${doctorMiddleName} ${nl} ${doctorNote}";
+      "${date}, ${doctorName} ${doctorSurname} ${doctorMiddleName}${nl}${doctorNote}";
 
   static String m1(date, procedureName, nl, procedureNote) =>
-      "${date}, ${procedureName} ${nl} ${procedureNote}";
+      "${date}, ${procedureName}${nl}${procedureNote}";
 
   static String m2(time, meals) => "Take in the ${time} ${meals}";
 

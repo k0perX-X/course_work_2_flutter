@@ -69,38 +69,43 @@ class _MedicinePage extends State<MedicinePage> {
       drugMap[r.drug.id]!.patientDrugRemaining = r;
     }
 
-    List<Widget> listPatientMedicineWillGoBad = patientMedicineWillGoBad.map((v) {
-      return ElevatedButton(
-        onPressed: () async {
-          functionOnTap(context, v.drug, v.remaining);
-        },
-        child: Row(children: [
-          RichText(
-              text: TextSpan(children: <TextSpan>[
-            TextSpan(
-              text: v.drug.name,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: Colors.red),
-            ),
-            const TextSpan(text: "\n"),
-            TextSpan(
-              text: AppLocalizations.of(context)!
-                  .medicineWillGoBad
-                  .replaceAll("{remaining}", v.remaining.toString())
-                  .replaceAll('{date}', v.minimalDateOfManufacture.toString()),
-              style: const TextStyle(color: Colors.red),
-            ),
-          ])),
-        ]),
-        // ListTile(
-        //   title: Text(
-        //     patientMedicineWillGoBad[index].drug.name,
-        //     style: const TextStyle(color: Colors.red),
-        //   ),
-        // ))
-      );
+    List<Widget> listPatientMedicineWillGoBad =
+        patientMedicineWillGoBad.map((v) {
+      return Padding(
+          padding: const EdgeInsets.all(8),
+          child: InkWell(
+            onTap: () async {
+              functionOnTap(context, v.drug, v.remaining);
+            },
+            child: Row(children: [
+              Flexible(
+                  child: RichText(
+                      text: TextSpan(children: <TextSpan>[
+                TextSpan(
+                  text: v.drug.name,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: Colors.red),
+                ),
+                const TextSpan(text: "\n"),
+                TextSpan(
+                  text: AppLocalizations.of(context)!
+                      .medicineWillGoBad
+                      .replaceAll("{remaining}", v.remaining.toString())
+                      .replaceAll(
+                          '{date}', v.minimalDateOfManufacture.toString()),
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ]))),
+            ]),
+            // ListTile(
+            //   title: Text(
+            //     patientMedicineWillGoBad[index].drug.name,
+            //     style: const TextStyle(color: Colors.red),
+            //   ),
+            // ))
+          ));
     }).toList();
 
     var listPrescribedMedicationsWarns = <DrugMap>[];
@@ -127,76 +132,79 @@ class _MedicinePage extends State<MedicinePage> {
             : "",
       ];
       time.removeWhere((element) => element == "");
-      return ElevatedButton(
-          onPressed: () async {
-            var remaining = v.runningOutMedication!.remaining;
-            if (remaining > 0) {
-              await functionOnTap(
-                  context, v.runningOutMedication!.drug, remaining);
-            } else {
-              await showDialog<void>(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text(AppLocalizations.of(context)!
-                        .medicineTakeRunningOutMedicationErrorTitle),
-                    content: Text(AppLocalizations.of(context)!
-                        .medicineTakeRunningOutMedicationErrorNote),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
+      return Padding(
+          padding: const EdgeInsets.all(8),
+          child: InkWell(
+              onTap: () async {
+                var remaining = v.runningOutMedication!.remaining;
+                if (remaining > 0) {
+                  await functionOnTap(
+                      context, v.runningOutMedication!.drug, remaining);
+                } else {
+                  await showDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(AppLocalizations.of(context)!
+                            .medicineTakeRunningOutMedicationErrorTitle),
+                        content: Text(AppLocalizations.of(context)!
+                            .medicineTakeRunningOutMedicationErrorNote),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
                   );
-                },
-              );
-            }
-          },
-          child: Row(children: [
-            RichText(
-                text: TextSpan(children: <TextSpan>[
-              TextSpan(
-                text: v.runningOutMedication!.drug.name,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const TextSpan(text: "\n"),
-              TextSpan(
-                text: AppLocalizations.of(context)!
-                    .medicineInstruction
-                    .replaceAll("{time}", time.join(", "))
-                    .replaceAll(
-                        "{meals}",
-                        [
-                          v.patientPrescribedMedication!.takeBeforeMeals
-                              ? AppLocalizations.of(context)!
-                                  .medicineTakeBeforeMeals
-                              : "",
-                          v.patientPrescribedMedication!.takeWithMeals
-                              ? AppLocalizations.of(context)!
-                                  .medicineTakeWithMeals
-                              : "",
-                          v.patientPrescribedMedication!.takeAfterMeals
-                              ? AppLocalizations.of(context)!
-                                  .medicineTakeAfterMeals
-                              : "",
-                        ].firstWhere((element) => element != "",
-                            orElse: () => "")),
-              ),
-              const TextSpan(text: "\n"),
-              TextSpan(
-                text: AppLocalizations.of(context)!
-                    .medicineRunningOutMedication
-                    .replaceAll("{remaining}",
-                        v.runningOutMedication!.remaining.toString())
-                    .replaceAll('{leftToTake}',
-                        v.runningOutMedication!.leftToTake.toString()),
-                style: const TextStyle(color: Colors.red),
-              ),
-            ])),
-          ]));
+                }
+              },
+              child: Row(children: [
+                Flexible(
+                    child: RichText(
+                        text: TextSpan(children: <TextSpan>[
+                  TextSpan(
+                    text: v.runningOutMedication!.drug.name,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const TextSpan(text: "\n"),
+                  TextSpan(
+                    text: AppLocalizations.of(context)!
+                        .medicineInstruction
+                        .replaceAll("{time}", time.join(", "))
+                        .replaceAll(
+                            "{meals}",
+                            [
+                              v.patientPrescribedMedication!.takeBeforeMeals
+                                  ? AppLocalizations.of(context)!
+                                      .medicineTakeBeforeMeals
+                                  : "",
+                              v.patientPrescribedMedication!.takeWithMeals
+                                  ? AppLocalizations.of(context)!
+                                      .medicineTakeWithMeals
+                                  : "",
+                              v.patientPrescribedMedication!.takeAfterMeals
+                                  ? AppLocalizations.of(context)!
+                                      .medicineTakeAfterMeals
+                                  : "",
+                            ].firstWhere((element) => element != "",
+                                orElse: () => "")),
+                  ),
+                  const TextSpan(text: "\n"),
+                  TextSpan(
+                    text: AppLocalizations.of(context)!
+                        .medicineRunningOutMedication
+                        .replaceAll("{remaining}",
+                            v.runningOutMedication!.remaining.toString())
+                        .replaceAll('{leftToTake}',
+                            v.runningOutMedication!.leftToTake.toString()),
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ]))),
+              ])));
     }).toList();
 
     List<Widget> listPrescribedMedicationsNotWarnsWidgets =
@@ -213,43 +221,46 @@ class _MedicinePage extends State<MedicinePage> {
             : "",
       ];
       time.removeWhere((element) => element == "");
-      return ElevatedButton(
-          onPressed: () async {
-            functionOnTap(context, v.patientDrugRemaining!.drug,
-                v.patientDrugRemaining!.remaining);
-          },
-          child: Row(children: [
-            RichText(
-                text: TextSpan(children: <TextSpan>[
-              TextSpan(
-                text: v.patientDrugRemaining!.drug.name,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const TextSpan(text: "\n"),
-              TextSpan(
-                text: AppLocalizations.of(context)!
-                    .medicineInstruction
-                    .replaceAll("{time}", time.join(", "))
-                    .replaceAll(
-                        "{meals}",
-                        [
-                          v.patientPrescribedMedication!.takeBeforeMeals
-                              ? AppLocalizations.of(context)!
-                                  .medicineTakeBeforeMeals
-                              : "",
-                          v.patientPrescribedMedication!.takeWithMeals
-                              ? AppLocalizations.of(context)!
-                                  .medicineTakeWithMeals
-                              : "",
-                          v.patientPrescribedMedication!.takeAfterMeals
-                              ? AppLocalizations.of(context)!
-                                  .medicineTakeAfterMeals
-                              : "",
-                        ].firstWhere((element) => element != "",
-                            orElse: () => "")),
-              ),
-            ]))
-          ]));
+      return Padding(
+          padding: const EdgeInsets.all(8),
+          child: InkWell(
+              onTap: () async {
+                functionOnTap(context, v.patientDrugRemaining!.drug,
+                    v.patientDrugRemaining!.remaining);
+              },
+              child: Row(children: [
+                Flexible(
+                    child: RichText(
+                        text: TextSpan(children: <TextSpan>[
+                  TextSpan(
+                    text: v.patientDrugRemaining!.drug.name,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const TextSpan(text: "\n"),
+                  TextSpan(
+                    text: AppLocalizations.of(context)!
+                        .medicineInstruction
+                        .replaceAll("{time}", time.join(", "))
+                        .replaceAll(
+                            "{meals}",
+                            [
+                              v.patientPrescribedMedication!.takeBeforeMeals
+                                  ? AppLocalizations.of(context)!
+                                      .medicineTakeBeforeMeals
+                                  : "",
+                              v.patientPrescribedMedication!.takeWithMeals
+                                  ? AppLocalizations.of(context)!
+                                      .medicineTakeWithMeals
+                                  : "",
+                              v.patientPrescribedMedication!.takeAfterMeals
+                                  ? AppLocalizations.of(context)!
+                                      .medicineTakeAfterMeals
+                                  : "",
+                            ].firstWhere((element) => element != "",
+                                orElse: () => "")),
+                  ),
+                ])))
+              ])));
     }).toList();
 
     return BetterListView(listPatientMedicineWillGoBad +
@@ -265,48 +276,61 @@ class _MedicinePage extends State<MedicinePage> {
     //     .textTheme
     //     .bodyText1!
     //     .copyWith(color: Colors.white);
-    return ListView(
-      children: [
-        FutureBuilder<Widget>(
-            future: getAllData(context),
-            builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-              List<Widget> children;
-              if (snapshot.hasData) {
-                children = <Widget>[snapshot.data!];
-              } else if (snapshot.hasError) {
-                var e = snapshot.error;
-                children = <Widget>[
-                  const Icon(
-                    Icons.error_outline,
-                    color: Colors.red,
-                    size: 60,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child:
-                        Text(AppLocalizations.of(context)!.medicineLoadError),
-                  )
-                ];
-              } else {
-                children = <Widget>[
-                  const SizedBox(
-                    width: 60,
-                    height: 60,
-                    child: CircularProgressIndicator(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Text(AppLocalizations.of(context)!.medicineLoading),
-                  )
-                ];
-              }
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: children,
-              );
-            }),
-      ],
-    );
+    return FutureBuilder<Widget>(
+        future: getAllData(context),
+        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+          Widget child;
+          if (snapshot.hasData) {
+            child = Scaffold(
+              body: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: snapshot.data!,
+              ),
+              floatingActionButton: FloatingActionButton.extended(
+                onPressed: () {
+                  // Add your onPressed code here!
+                },
+                label: Text('Add medication', style: TextStyle(color: globals.textOnAccent)), //TODO
+                icon: const Icon(Icons.add),
+                backgroundColor: globals.accentColor,
+              ),
+            );
+          } else if (snapshot.hasError) {
+            child = Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 60,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  // child: Text(snapshot.error.toString()),
+                  child: Text(AppLocalizations.of(context)!.medicineLoadError),
+                )
+              ],
+            ));
+          } else {
+            child = Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: CircularProgressIndicator(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text(AppLocalizations.of(context)!.medicineLoading),
+                )
+              ],
+            ));
+          }
+          return child;
+        });
   }
 }
 
@@ -369,7 +393,7 @@ class PatientDrugRemaining {
 
   factory PatientDrugRemaining.fromJson(Map<String, dynamic> json) {
     return PatientDrugRemaining(Drug.fromJson(json["drug"]),
-        json["minimalDateOfManufacture"], json["remaining"]);
+        DateTime.parse(json["minimalDateOfManufacture"]), json["remaining"]);
   }
 }
 
