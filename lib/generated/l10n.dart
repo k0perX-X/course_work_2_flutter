@@ -50,12 +50,92 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Select a production date:`
+  String get addMedicineEnterDateOfManuf {
+    return Intl.message(
+      'Select a production date:',
+      name: 'addMedicineEnterDateOfManuf',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save error. If the error persists, please try again later.`
+  String get addMedicineSaveErrorNote {
+    return Intl.message(
+      'Save error. If the error persists, please try again later.',
+      name: 'addMedicineSaveErrorNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error`
+  String get addMedicineSaveErrorTitle {
+    return Intl.message(
+      'Error',
+      name: 'addMedicineSaveErrorTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add medication`
+  String get addMedicineTitle {
+    return Intl.message(
+      'Add medication',
+      name: 'addMedicineTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Patient Application`
   String get appTitle {
     return Intl.message(
       'Patient Application',
       name: 'appTitle',
       desc: 'Название приложения',
+      args: [],
+    );
+  }
+
+  /// `Describe your condition`
+  String get healthStatusNote {
+    return Intl.message(
+      'Describe your condition',
+      name: 'healthStatusNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Body temperature`
+  String get healthStatusTemperature {
+    return Intl.message(
+      'Body temperature',
+      name: 'healthStatusTemperature',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Health information`
+  String get healthStatusTitle {
+    return Intl.message(
+      'Health information',
+      name: 'healthStatusTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add health information`
+  String get homeHealthStatusButton {
+    return Intl.message(
+      'Add health information',
+      name: 'homeHealthStatusButton',
+      desc: '',
       args: [],
     );
   }
@@ -202,6 +282,16 @@ class S {
     return Intl.message(
       'Welcome',
       name: 'loginWelcomeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add medication`
+  String get medicineFloatingButton {
+    return Intl.message(
+      'Add medication',
+      name: 'medicineFloatingButton',
       desc: '',
       args: [],
     );

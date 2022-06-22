@@ -13,5 +13,4 @@ class Drug {
       note: json["note"]
     );
   }
-
 }

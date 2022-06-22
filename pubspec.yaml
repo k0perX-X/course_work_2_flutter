@@ -49,6 +49,8 @@ dependencies:
 
   flutter_native_splash: ^2.2.3
 
+  dropdown_search: ^5.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

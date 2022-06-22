@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:course_work_2_flutter/globals.dart' as globals;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:course_work_2_flutter/pages/health_status_page.dart';
 
 const procedureDuration = Duration(days: 14);
 
@@ -161,9 +162,9 @@ class HomePage extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16),
-                  child: Text(snapshot.error.toString()),
-                  // child: Text(AppLocalizations.of(context)!
-                  //     .homePatientProcedureLoadingError),
+                  // child: Text(snapshot.error.toString()),
+                  child: Text(AppLocalizations.of(context)!
+                      .homePatientProcedureLoadingError),
                 )
               ];
             } else {
@@ -237,11 +238,14 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(15),
         child: FloatingActionButton.extended(
           label: Text(
-            "Добавить информацию о состоянии здоровья",
+            AppLocalizations.of(context)!.homeHealthStatusButton,
             style: TextStyle(color: globals.textOnAccent),
-          ), // TODO
+          ),
           backgroundColor: globals.accentColor,
-          onPressed: () {},
+          onPressed: () async {
+            await Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HealthStatus()));
+          },
         ),
       ),
     ]);

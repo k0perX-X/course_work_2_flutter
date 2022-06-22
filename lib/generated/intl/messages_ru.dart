@@ -39,7 +39,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "addMedicineEnterDateOfManuf":
+            MessageLookupByLibrary.simpleMessage("Выберите дату производства:"),
+        "addMedicineSaveErrorNote": MessageLookupByLibrary.simpleMessage(
+            "Ошибка сохранения. Если ошибка повторяется, попробуйте позже."),
+        "addMedicineSaveErrorTitle":
+            MessageLookupByLibrary.simpleMessage("Ошибка"),
+        "addMedicineTitle":
+            MessageLookupByLibrary.simpleMessage("Добавить лекарство"),
         "appTitle": MessageLookupByLibrary.simpleMessage("Приложение пациента"),
+        "healthStatusNote":
+            MessageLookupByLibrary.simpleMessage("Опишите своё состояние"),
+        "healthStatusTemperature":
+            MessageLookupByLibrary.simpleMessage("Температура тела"),
+        "healthStatusTitle":
+            MessageLookupByLibrary.simpleMessage("Информация о здоровье"),
+        "homeHealthStatusButton": MessageLookupByLibrary.simpleMessage(
+            "Добавить информацию о состоянии здоровья"),
         "homePatientDoctorsAppointmentLoading":
             MessageLookupByLibrary.simpleMessage("Загрузка записей ко врачу"),
         "homePatientDoctorsAppointmentLoadingError":
@@ -66,6 +82,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginSingIn": MessageLookupByLibrary.simpleMessage("Войти"),
         "loginWelcomeTitle":
             MessageLookupByLibrary.simpleMessage("Добро\nпожаловать"),
+        "medicineFloatingButton":
+            MessageLookupByLibrary.simpleMessage("Добавить лекарство"),
         "medicineInstruction": m2,
         "medicineLoadError": MessageLookupByLibrary.simpleMessage(
             "Ошибка загрузки данных о лекарствах"),
