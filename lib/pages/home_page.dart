@@ -29,7 +29,7 @@ class PatientProcedure {
   String toStringContext(BuildContext context) {
     return AppLocalizations.of(context)!
         .homePatientProcedureToString
-        .replaceAll("{date}", dateTime.toString())
+        .replaceAll("{date}", DateFormat.yMd().add_Hm().format(dateTime))
         .replaceAll("{procedureName}", procedure.name)
         .replaceAll("{nl}", procedure.note == null ? "" : "\n")
         .replaceAll("{procedureNote}", procedure.note ?? "");
