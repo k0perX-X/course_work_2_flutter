@@ -327,9 +327,14 @@ class _MedicinePage extends State<MedicinePage> {
                         const TextSpan(text: "\n"),
                         TextSpan(
                           text: AppLocalizations.of(context)!
-                              .medicineInstruction
-                              .replaceAll("{time}", "")
-                              .replaceAll("{meals}", ""),
+                              .medicineWillGoBad
+                              .replaceAll("{remaining}",
+                                  v.patientDrugRemaining!.remaining.toString())
+                              .replaceAll(
+                                  '{date}',
+                                  DateFormat.yMd().format(v
+                                      .patientDrugRemaining!
+                                      .minimalDateOfManufacture)),
                         ),
                       ],
                     ),
